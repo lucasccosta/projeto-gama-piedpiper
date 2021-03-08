@@ -34,14 +34,9 @@ exports.inserirEndereco = async (req, h) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste');
 
-  const {rua, numero, cidade, complemento, uf, cep} = req.payload
+  // const {rua, numero, cidade, complemento, uf, cep} = req.payload
   const endereco = await db.collection('endereco').insertOne({
-    rua,
-    numero,
-    cidade,
-    complemento,
-    uf,
-    cep,
+    $set: req.payload
   })
 
   await client.close();

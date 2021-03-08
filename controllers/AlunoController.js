@@ -1,8 +1,12 @@
-const { MongoClient, ObjectId } = require('mongodb');
+/*
+Aluno: nome, telefone, curso
+Endereço: rua, numero, cidade, complemento, uf, cep
+Disciplinas: nome, nota1, nota2, notaTrabalho, notaApresentacao, conceito, status
+*/
 
+const {MongoClient, ObjectId} = require('mongodb');
 const connectionString = 'mongodb://localhost:27017/teste'
 
-// Lista todos os alunos
 exports.listarAlunos = async (req, res) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste')
@@ -31,64 +35,79 @@ exports.inserirAlunos = async (req, res) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste')
 
-  const { nome, telefone, curso } = req.payload;
+  const { nome, telefone, curso, disciplina:{
+    nomeDisciplina, nota1, nota2, notaTrabalho, notaApresentacao, conceito, status
+  }, endereco:{rua, numero, cidade, complemento, uf, cep} } = req.payload
 
   const aluno = await db.collection('aluno').insertOne({
     nome,
     telefone,
     curso,
+    endereco:{
+      rua,
+      numero,
+      cidade,
+      complemento,
+      uf,
+      cep,
+    },
+    disciplina:{
+      nomeDisciplina,
+      nota1,
+      nota2,
+      notaTrabalho,
+      notaApresentacao,
+      conceito,
+      status
+    },
     criacao: new Date()
   })
 
   await client.close();
+
   return aluno;
-  // return aluno.ops[0];
 }
 
-// exports.inserirAlunos = async (req, res) => {
-//   const client = await MongoClient.connect(connectionString);
-//   const db = client.db('teste')
-
-//   const { nome, telefone, curso: nomeCurso } = req.payload;
-
-//   const curso = await db.collection('curso').findOne({ nome: nomeCurso}, {projection: {_id: 1}})
-
-//   const aluno = await db.collection('aluno').insertOne({
-//     nome,
-//     telefone,
-//     curso: curso._id,
-//     criacao: new Date()
-//   })
-
-//   client.close();
-
-//   return aluno.modifiedCount;
-// }
-
-// não tá funcionando
 exports.atualizarAlunos = async (req, res) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste');
 
   const _id = ObjectId.createFromHexString(req.params.id)
-  const { nome, telefone, curso } = req.payload
 
-  const aluno = await db
+  const resultado = await db
     .collection('aluno')
     .updateOne(
-      {_id}, {
-        $set:{
-          nome,
-          telefone,
-          curso
-        }
+      {_id},
+        {
+        $set: req.payload
       }
      )
 
   await client.close();
   
-  return aluno.modifiedCount;
+  return resultado.modifiedCount;
 }
+
+// exports.inserirDisciplinas = async (req, res) => {
+//   const client = await MongoClient.connect(connectionString);
+//   const db = client.db('teste');
+
+//   const _id = ObjectId.createFromHexString(req.params.id)
+
+//   const resultado = await db
+//     .collection('aluno')
+//     .updateOne(
+//       {_id},
+//         {
+//         $set: req.payload
+//       }
+//      )
+
+//   await client.close();
+  
+//   return resultado.modifiedCount;
+// }
+
 
 exports.deletarAluno = async (req, res) => {
   const client = await MongoClient.connect(connectionString);

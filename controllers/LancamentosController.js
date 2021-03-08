@@ -20,7 +20,7 @@ async function obterSaldo(db) {
   return saldo;
 }
 
-exports.listarLancamentos = async (filtro) => {
+async function listarLancamentos (filtro) {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste');
 
@@ -31,11 +31,19 @@ exports.listarLancamentos = async (filtro) => {
 
   await client.close();
 
-  return lancamentos
+  return lancamentos;
 }
 
 exports.listarLancamentos = async (req, h) => {
-  return this.listarLancamentos();
+  return listarLancamentos();
+}
+
+exports.listarReceitas = async (req, res) => {
+  return listarLancamentos({ valor: { $gte: 0} });
+}
+
+exports.listarDespesas = async (req, res) => {
+  return listarLancamentos({ valor: { $lt: 0} });
 }
 
 // exports.listarLancamentos = async (req, h) => {
@@ -131,4 +139,39 @@ exports.obterSaldo = async (req, h) => {
 
   client.close();
   return saldo;
+}
+
+exports.agruparPorCategoria = async (req, h) => {
+  const client = await MongoClient.connect(connectionString);
+  const db = client.db('teste');
+  
+  const agrupamentos = await db.collection('lancamentos').aggregate([
+    {
+      $group: {_id: '$categoria', total: {$sum: '$$ROOT.valor'}} // agrupar pela chave (os ids) de categoria
+    }, // e rolará uma soma com o próprio documento ($$ROOT) e o .valor da despesa
+    { // porém ao rodar isso, não seriam vistos os nomes da categoria, no banco de dados
+      $lookup: { // lembrando que a chave do agrupamento é o _id: categoria, então o lookup é feito com o id CATEGORIA
+        from: 'categorias', // collection que estamos procurando o agrupamento
+        localField: '_id', // o campo em que estamos buscando a nossa chave primária - no nosso caso é o _id, pois o agrupamos por categoria - logo ele não é mais um id de !!lancamentos!! e sim de categoria
+        foreignField: '_id', // id da categoria mesmo
+        as: 'categoria' // e esse é o retrieve - o que aparecerá como coluna do banco de dados
+      }
+    },
+    {
+        $unwind: '$categoria'// lookup sempre retorna um array, então teremos que usar o unwind
+    }, // só que agora há mais campos que necessitamos, só precisamos de categoria e total, logo, faremos um project
+    {
+      $project: { total: 1, categoria: '$categoria.nome', _id: 0} // _id: 0 é pra tirar o id da projeção
+    } // total: 1 - é para definir que ele vai permanecer no pipeline
+  ]).toArray();
+
+  // O reduce é para transformar aqueles arrays em um objeto com todos as "categorias: valores"
+  const resultado = agrupamentos.reduce((acumulador, { total, categoria}) => {
+    acumulador[categoria] = total; // para acessar as propriedades de um objeto, usamos o []
+    return acumulador
+  }, {});
+
+  await client.close();
+
+  return resultado;
 }

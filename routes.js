@@ -34,6 +34,22 @@ module.exports = [
     path: '/lancamentos/saldo',
     handler: LancamentosController.obterSaldo
   },
+  {
+    method: 'GET',
+    path: '/lancamentos/receitas',
+    handler: LancamentosController.listarReceitas
+  },
+  {
+    method: 'GET',
+    path: '/lancamentos/despesas',
+    handler: LancamentosController.listarDespesas
+  },
+  {
+    method: 'GET',
+    path: '/lancamentos/por-categoria',
+    handler: LancamentosController.agruparPorCategoria
+  },
+
   // ----------------- Alunos ---------------
   {
     method: 'GET',
@@ -87,13 +103,13 @@ module.exports = [
 
   {
     method: 'PATCH', 
-    path: '/disciplina', 
+    path: '/disciplina/{id}', 
     handler: DisciplinaController.atualizarDisciplina
   }, 
 
   {
     method: 'DELETE', 
-    path: '/disciplina', 
+    path: '/disciplina/{id}', 
     handler: DisciplinaController.deletarDisciplina
   },
 

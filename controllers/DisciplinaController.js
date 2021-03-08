@@ -44,9 +44,9 @@ exports.inserirDisciplina = async (req, h) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste');
 
-  const {nome, nota1, nota2, notaTrabalho, notaApresentacao, conceito} = req.payload;
+  const {nome, nota1, nota2, notaTrabalho, notaApresentacao, conceito, status} = req.payload;
 
-  const media = (nota1 + nota2 + notaTrabalho + notaApresentacao) / 4;
+  const notaFinal = (nota1 + nota2 + notaTrabalho + notaApresentacao) / 4;
 
   const disciplina = await db.collection('disciplina').insertOne({
     nome, 
@@ -54,10 +54,14 @@ exports.inserirDisciplina = async (req, h) => {
     nota2, 
     notaTrabalho, 
     notaApresentacao, 
-    conceito, 
-    media, 
-    status = media > 7 ? 'Aprovado' : 'Reprovado'
+    conceito:'', 
+    notaFinal: '', 
+    status: ''
   });
+
+  // const disciplinaFinal = await db.collection('disciplina').updateOne({
+
+  // })
 
   await client.close();
 
@@ -70,13 +74,19 @@ exports.atualizarDisciplina = async (req, h) => {
 
   const _id = ObjectId.createFromHexString(req.params.id);
 
-  const {nome, nota1, nota2, notaTrabalho, notaApresentacao, conceito, media, status} = req.payload;
 
-  const resultado = await db.collection('disciplina').updateOne({_id}, {$set: disciplina});
+  const resultado = await db
+  .collection('disciplina')
+  .updateOne(
+    {_id},
+       {
+      $set: req.payload
+    }
+  );
 
   await client.close();
 
-  return resultado.modifiedCount;
+  return resultado;
 }
 
 exports.deletarDisciplina = async (req, h) => {
