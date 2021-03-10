@@ -5,22 +5,12 @@ Disciplinas: nome, nota1, nota2, notaTrabalho, notaApresentacao, conceito, statu
 */
 
 const {MongoClient, ObjectId} = require('mongodb');
-<<<<<<< HEAD
 const MongoDbRepository = require('../repositories/MongoDbRepository');
 const connectionString = 'mongodb://localhost:27017/teste'
 
 exports.listarAlunos = async (req, h) => {
   const db = req.server.plugins['hapi-mongodb'].db;
   const repository = new MongoDbRepository(db, 'aluno');
-=======
-const connectionString = 'mongodb://localhost:27017/teste'
-
-exports.listarAlunos = async (req, res) => {
-  const client = await MongoClient.connect(connectionString);
-  const db = client.db('teste')
-
-  const alunos = await db.collection('aluno').find().toArray()
->>>>>>> d64b410ca12ceead1ee797f20aa86a4a52746993
 
   return aluno = await repository.list();
 }
@@ -37,7 +27,6 @@ exports.inserirAlunos = async (req, res) => {
   const client = await MongoClient.connect(connectionString);
   const db = client.db('teste')
 
-<<<<<<< HEAD
   const aluno = await db.collection('aluno').insertOne(req.payload)
 
   // const aluno = await db.collection('aluno').insertOne({
@@ -65,35 +54,6 @@ exports.inserirAlunos = async (req, res) => {
   //   },
   //   criacao: new Date()
   // })
-=======
-  const { nome, telefone, curso, disciplina:{
-    nomeDisciplina, nota1, nota2, notaTrabalho, notaApresentacao, conceito, status
-  }, endereco:{rua, numero, cidade, complemento, uf, cep} } = req.payload
-
-  const aluno = await db.collection('aluno').insertOne({
-    nome,
-    telefone,
-    curso,
-    endereco:{
-      rua,
-      numero,
-      cidade,
-      complemento,
-      uf,
-      cep,
-    },
-    disciplina:{
-      nomeDisciplina,
-      nota1,
-      nota2,
-      notaTrabalho,
-      notaApresentacao,
-      conceito,
-      status
-    },
-    criacao: new Date()
-  })
->>>>>>> d64b410ca12ceead1ee797f20aa86a4a52746993
 
   await client.close();
 
@@ -104,7 +64,6 @@ exports.inserirAlunos = async (req, h) => {
   const db = req.server.plugins['hapi-mongodb'].db;
   const repository = new MongoDbRepository(db, 'aluno')
 
-<<<<<<< HEAD
   return resultado = await repository.insert(req.payload)
 }
 
@@ -183,47 +142,6 @@ exports.atualizarAlunos = async (req, h) => {
 // exports.inserirDisciplinas = async (req, res) => {
 //   const client = await MongoClient.connect(connectionString);
 //   const db = client.db('teste');
-=======
-exports.atualizarAlunos = async (req, res) => {
-  const client = await MongoClient.connect(connectionString);
-  const db = client.db('teste');
-
-  const _id = ObjectId.createFromHexString(req.params.id)
-
-  const resultado = await db
-    .collection('aluno')
-    .updateOne(
-      {_id},
-        {
-        $set: req.payload
-      }
-     )
->>>>>>> d64b410ca12ceead1ee797f20aa86a4a52746993
-
-//   const _id = ObjectId.createFromHexString(req.params.id)
-
-//   const resultado = await db
-//     .collection('aluno')
-//     .updateOne(
-//       {_id},
-//         {
-//         $set: req.payload
-//       }
-//      )
-
-//   await client.close();
-  
-<<<<<<< HEAD
-//   return resultado.modifiedCount;
-// }
-
-=======
-  return resultado.modifiedCount;
-}
-
-// exports.inserirDisciplinas = async (req, res) => {
-//   const client = await MongoClient.connect(connectionString);
-//   const db = client.db('teste');
 
 //   const _id = ObjectId.createFromHexString(req.params.id)
 
@@ -241,11 +159,6 @@ exports.atualizarAlunos = async (req, res) => {
 //   return resultado.modifiedCount;
 // }
 
-
-exports.deletarAluno = async (req, res) => {
-  const client = await MongoClient.connect(connectionString);
-  const db = client.db('teste');
->>>>>>> d64b410ca12ceead1ee797f20aa86a4a52746993
 
 exports.deletarAluno = async (req, res) => {
   const db = req.server.plugins['hapi-mongodb'].db;

@@ -15,10 +15,7 @@
     "hapi-mongodb": "^9.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.4",
-<<<<<<< HEAD
     "node-fetch": "^2.6.1",
-=======
->>>>>>> d64b410ca12ceead1ee797f20aa86a4a52746993
     "nodemon": "^2.0.7"
   }
 }
