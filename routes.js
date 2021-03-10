@@ -2,6 +2,7 @@ const LancamentosController = require ('./controllers/LancamentosController.js')
 const AlunoController = require ('./controllers/AlunoController.js')
 const EnderecoController = require ('./controllers/EnderecoController')
 const DisciplinaController = require ('./controllers/DisciplinaController')
+const AutorizacaoController = require('./controllers/AutorizacaoController')
 
 module.exports = [
   {
@@ -138,5 +139,10 @@ module.exports = [
   method: 'DELETE',
   path: '/endereco/{id}',
   handler: EnderecoController.deletarEndereco
+  },
+  {
+  method: 'POST',
+  path: '/token',
+  handler: AutorizacaoController.token
   },
 ]
