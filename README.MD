@@ -30,10 +30,10 @@ A partir daí foram desenvolvidas as funções relativas à criação do servido
 
 ou utilizando o nodemon:
 
-# global
+### global
 nodemon server.js
 
-# local
+### local
 npx nodemon server.js
 
 ### Trocando de persistência
