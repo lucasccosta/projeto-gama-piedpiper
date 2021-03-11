@@ -41,7 +41,7 @@ npx nodemon server.js
 Para configurar qual será o repositório utilizado para persistir os dados recebidos pela API, utilize o header X-Persistence na requisição, com um dos seguintes valores:
 
 mongodb - padrão
-Precisa de um servidor de MongoDB rodando em localhost na porta 27017. O banco padrão para as operações é "teste".
+Precisa de um servidor de MongoDB rodando em localhost na porta 3000. O banco padrão para as operações é "teste".
 
 rest
-Tenta se conectar em uma API de REST rodando em localhost na porta 3030. A rota padrão para as operações é /alunos.
+Tenta se conectar em uma API de REST rodando em localhost na porta 8080. A rota padrão para as operações é /alunos.
