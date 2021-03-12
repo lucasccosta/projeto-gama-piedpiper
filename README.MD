@@ -1,9 +1,6 @@
 # Turma 1 da Gama Academia - Accademia Accenture 2.0
 Projeto de Java - Grupo Pied Piper
 
-[Swagger com documentação API REST do projeto](https://piedpiper-gama-java.herokuapp.com/index.html)
-
-
 ### Integrantes
 - [Lucas Costa](https://github.com/lucasccosta)
 - [Laís Marques](https://github.com/laismarques)
@@ -45,3 +42,6 @@ Precisa de um servidor de MongoDB rodando em localhost na porta 3000. O banco pa
 
 rest
 Tenta se conectar em uma API de REST rodando em localhost na porta 8080. A rota padrão para as operações é /alunos.
+
+### Para gerar a documentação via swagger
+- url: http://localhost:3000/doc
